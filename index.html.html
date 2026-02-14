@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aditya Patel — Trust & Safety Engineer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0c10;
+      --surface:   #111318;
+      --border:    #1e2230;
+      --accent:    #00d4ff;
+      --accent2:   #7b61ff;
+      --text:      #e8eaf0;
+      --muted:     #6b7280;
+      --card:      #13161f;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'IBM Plex Mono', monospace;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.35; pointer-events: none;
+    }
+
+    /* ── GRID LINES ── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.3; pointer-events: none;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(10,12,16,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: 1.1rem;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+    }
+
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none;
+      transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── SECTIONS ── */
+    section { position: relative; z-index: 1; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 10rem 4rem 6rem;
+      position: relative; overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute; top: -10%; right: -5%;
+      width: 700px; height: 700px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,212,255,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-glow2 {
+      position: absolute; bottom: 10%; left: -5%;
+      width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(123,97,255,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.25);
+      padding: 0.35rem 0.9rem; border-radius: 2rem;
+      font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 2rem;
+      animation: fadeUp 0.7s ease both;
+    }
+    .hero-badge::before { content: '●'; font-size: 0.5rem; color: #00ff88; }
+
+    .hero-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: clamp(3.5rem, 8vw, 7rem);
+      line-height: 1; letter-spacing: -0.02em;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+    .hero-name span { color: var(--accent); }
+
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      font-weight: 400; color: var(--muted);
+      margin-top: 0.8rem;
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+
+    .hero-desc {
+      max-width: 580px; margin-top: 1.8rem;
+      font-size: 0.82rem; line-height: 1.9; color: #9ca3af;
+      animation: fadeUp 0.7s 0.3s ease both;
+    }
+
+    .hero-cta {
+      display: flex; gap: 1rem; margin-top: 2.5rem; flex-wrap: wrap;
+      animation: fadeUp 0.7s 0.4s ease both;
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.75rem 1.8rem; border-radius: 4px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase;
+      text-decoration: none; cursor: pointer; border: none;
+      transition: all 0.25s;
+    }
+    .btn-primary {
+      background: var(--accent); color: #0a0c10; font-weight: 600;
+    }
+    .btn-primary:hover { background: #33ddff; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,212,255,0.3); }
+
+    .btn-outline {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+    .hero-stats {
+      display: flex; gap: 3rem; margin-top: 4rem;
+      animation: fadeUp 0.7s 0.5s ease both;
+    }
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.2rem; font-weight: 800; color: var(--accent);
+    }
+    .stat-label { font-size: 0.68rem; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; margin-top: 0.2rem; }
+
+    /* ── CONTAINER ── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 6rem 4rem; }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800; margin-bottom: 3rem;
+    }
+
+    /* ── DIVIDER ── */
+    .divider { height: 1px; background: var(--border); margin: 0 4rem; }
+
+    /* ── EXPERIENCE ── */
+    #experience { background: var(--surface); }
+
+    .exp-grid { display: grid; gap: 1.5rem; }
+
+    .exp-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px; padding: 2rem;
+      transition: border-color 0.25s, transform 0.25s;
+      position: relative; overflow: hidden;
+    }
+    .exp-card::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+      background: linear-gradient(180deg, var(--accent), var(--accent2));
+      opacity: 0; transition: opacity 0.25s;
+    }
+    .exp-card:hover { border-color: rgba(0,212,255,0.3); transform: translateX(4px); }
+    .exp-card:hover::before { opacity: 1; }
+
+    .exp-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      gap: 1rem; flex-wrap: wrap; margin-bottom: 1.2rem;
+    }
+    .exp-company { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--text); }
+    .exp-role { font-size: 0.78rem; color: var(--accent); letter-spacing: 0.08em; margin-top: 0.2rem; }
+    .exp-period {
+      font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); background: rgba(255,255,255,0.04);
+      padding: 0.3rem 0.8rem; border-radius: 2rem; border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .exp-bullets { list-style: none; display: grid; gap: 0.6rem; }
+    .exp-bullets li {
+      font-size: 0.78rem; line-height: 1.7; color: #9ca3af;
+      padding-left: 1.2rem; position: relative;
+    }
+    .exp-bullets li::before {
+      content: '→'; position: absolute; left: 0;
+      color: var(--accent); font-size: 0.7rem;
+    }
+
+    /* ── SKILLS ── */
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+
+    .skill-group {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1.6rem;
+      transition: border-color 0.25s;
+    }
+    .skill-group:hover { border-color: rgba(123,97,255,0.4); }
+
+    .skill-group-title {
+      font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--accent2); margin-bottom: 1rem;
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .skill-tag {
+      font-size: 0.68rem; padding: 0.3rem 0.7rem;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      border-radius: 3px; color: #c4c9d8;
+      transition: all 0.2s;
+    }
+    .skill-tag:hover { background: rgba(0,212,255,0.08); border-color: rgba(0,212,255,0.3); color: var(--accent); }
+
+    /* ── CERTIFICATIONS ── */
+    .certs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+    .cert-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1.8rem;
+      display: flex; align-items: center; gap: 1.2rem;
+      transition: all 0.25s;
+    }
+    .cert-card:hover { border-color: rgba(0,212,255,0.3); transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.3); }
+    .cert-icon {
+      width: 48px; height: 48px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; flex-shrink: 0;
+    }
+    .cert-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; }
+    .cert-abbr { font-size: 0.7rem; color: var(--accent); letter-spacing: 0.1em; margin-top: 0.2rem; }
+
+    /* ── EDUCATION ── */
+    .edu-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 8px; padding: 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 2rem; flex-wrap: wrap;
+    }
+    .edu-degree { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem; }
+    .edu-school { font-size: 0.78rem; color: var(--muted); margin-top: 0.3rem; }
+    .edu-field { font-size: 0.78rem; color: var(--accent); margin-top: 0.2rem; }
+    .edu-year {
+      font-size: 0.72rem; color: var(--muted); letter-spacing: 0.1em;
+      background: rgba(255,255,255,0.04); padding: 0.4rem 1rem;
+      border-radius: 2rem; border: 1px solid var(--border);
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--surface); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .contact-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1.6rem;
+      display: flex; align-items: center; gap: 1rem;
+      text-decoration: none; color: var(--text);
+      transition: all 0.25s;
+    }
+    .contact-card:hover { border-color: rgba(0,212,255,0.4); transform: translateY(-2px); }
+    .contact-icon { font-size: 1.3rem; }
+    .contact-label { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+    .contact-value { font-size: 0.82rem; margin-top: 0.2rem; }
+
+    /* ── HOW TO UPDATE SECTION ── */
+    .update-box {
+      margin-top: 4rem;
+      background: rgba(0,212,255,0.04);
+      border: 1px dashed rgba(0,212,255,0.25);
+      border-radius: 8px; padding: 2rem;
+    }
+    .update-title {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 1rem; color: var(--accent); margin-bottom: 1rem;
+    }
+    .update-steps { display: grid; gap: 0.7rem; }
+    .update-step {
+      font-size: 0.76rem; color: #9ca3af; line-height: 1.6;
+      padding-left: 1.5rem; position: relative;
+    }
+    .update-step .step-num {
+      position: absolute; left: 0; color: var(--accent); font-weight: 600;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative; z-index: 1;
+      text-align: center; padding: 2.5rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.7rem; color: var(--muted); letter-spacing: 0.08em;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 1.2rem; }
+      #hero { padding: 8rem 1.5rem 4rem; }
+      .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+      .container { padding: 4rem 1.5rem; }
+      .divider { margin: 0 1.5rem; }
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">AP</div>
+    <ul class="nav-links">
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#certifications">Certs</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-glow2"></div>
+    <div class="hero-badge">Available for Opportunities</div>
+    <h1 class="hero-name">Aditya<br/><span>Patel</span></h1>
+    <p class="hero-title">Trust &amp; Safety Engineer · Network Security</p>
+    <p class="hero-desc">
+      Protecting digital platforms from abuse, fraud, and spam. 3+ years of
+      experience spanning Amazon SES/SMS compliance, firewall operations, and
+      cross-functional security collaboration across global environments.
+    </p>
+    <div class="hero-cta">
+      <a href="#contact" class="btn btn-primary">Get in Touch →</a>
+      <a href="#experience" class="btn btn-outline">View Experience</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">3+</div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div>
+        <div class="stat-num">2</div>
+        <div class="stat-label">Certifications</div>
+      </div>
+      <div>
+        <div class="stat-num">10+</div>
+        <div class="stat-label">Core Skills</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="container">
+      <p class="section-label reveal">// work history</p>
+      <h2 class="section-title reveal">Experience</h2>
+      <div class="exp-grid">
+
+        <div class="exp-card reveal">
+          <div class="exp-header">
+            <div>
+              <div class="exp-company">Amazon</div>
+              <div class="exp-role">Trust and Safety Engineer</div>
+            </div>
+            <div class="exp-period">June 2025 – Present</div>
+          </div>
+          <ul class="exp-bullets">
+            <li>Assess and resolve SES/SMS service access requests based on use case, risk assessment, internet verification, and abuse history.</li>
+            <li>Investigate sending patterns; detect and escalate cold outreach, phishing, spam, and spoofing for manual senior review with enforcement actions.</li>
+            <li>Analyze bounce/complaint patterns and take mitigation actions to protect platform reputation.</li>
+            <li>Process Short Code, Long Code, TFN, and 10DLC registrations through Twilio and Sinch ensuring carrier rules and DLT compliance.</li>
+            <li>Guide customers on sender reputation, compliant messaging, opt-in rules, and content standards; create internal SOPs for recurring workflows.</li>
+            <li>Collaborate with internal policy, abuse, and engineering teams to mitigate high-risk activity.</li>
+          </ul>
+        </div>
+
+        <div class="exp-card reveal">
+          <div class="exp-header">
+            <div>
+              <div class="exp-company">BT Group</div>
+              <div class="exp-role">Network Security Engineer</div>
+            </div>
+            <div class="exp-period">Nov 2022 – May 2025</div>
+          </div>
+          <ul class="exp-bullets">
+            <li>Configured and troubleshot firewalls (Cisco ASA/FTD, Palo Alto NGFW) and load balancers (F5 LTM) for multiple enterprise clients.</li>
+            <li>Provisioned IP/VLAN assignments and performed NAT on edge devices for customer environments including VMs, hypervisors, firewalls, and load balancers.</li>
+            <li>Managed diverse security infrastructures across multiple clients in a shared team environment with cross-functional collaboration.</li>
+            <li>Resolved escalated technical issues ensuring system integrity and seamless business operations.</li>
+            <li>Maintained detailed ticket-based documentation and daily operational reports.</li>
+          </ul>
+        </div>
+
+        <div class="exp-card reveal">
+          <div class="exp-header">
+            <div>
+              <div class="exp-company">PurpleSynapz</div>
+              <div class="exp-role">Trainee Intern</div>
+            </div>
+            <div class="exp-period">June 2022 – Sept 2022</div>
+          </div>
+          <ul class="exp-bullets">
+            <li>Gained foundational knowledge in routing and switching protocols.</li>
+            <li>Hands-on experience with Cisco ASA and F5 LTM basic operations.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="container">
+      <p class="section-label reveal">// technical expertise</p>
+      <h2 class="section-title reveal">Skills</h2>
+      <div class="skills-grid">
+
+        <div class="skill-group reveal">
+          <div class="skill-group-title">Trust &amp; Safety</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Amazon SES</span>
+            <span class="skill-tag">SMS Compliance</span>
+            <span class="skill-tag">Short Codes</span>
+            <span class="skill-tag">Long Codes</span>
+            <span class="skill-tag">TFN</span>
+            <span class="skill-tag">10DLC</span>
+            <span class="skill-tag">Abuse Mitigation</span>
+            <span class="skill-tag">Spam Prevention</span>
+            <span class="skill-tag">Fraud Prevention</span>
+            <span class="skill-tag">Sender Reputation</span>
+          </div>
+        </div>
+
+        <div class="skill-group reveal">
+          <div class="skill-group-title">Network Security</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Cisco ASA/FTD</span>
+            <span class="skill-tag">Palo Alto NGFW</span>
+            <span class="skill-tag">F5 LTM</span>
+            <span class="skill-tag">TCP/IP</span>
+            <span class="skill-tag">DNS</span>
+            <span class="skill-tag">HTTP/HTTPS</span>
+            <span class="skill-tag">SSL/TLS</span>
+            <span class="skill-tag">OSI Model</span>
+            <span class="skill-tag">VPN (IPsec, SSL)</span>
+            <span class="skill-tag">PKI</span>
+          </div>
+        </div>
+
+        <div class="skill-group reveal">
+          <div class="skill-group-title">Auth &amp; Identity</div>
+          <div class="skill-tags">
+            <span class="skill-tag">DUO</span>
+            <span class="skill-tag">SAML</span>
+            <span class="skill-tag">RADIUS</span>
+            <span class="skill-tag">LDAP</span>
+            <span class="skill-tag">AAA</span>
+            <span class="skill-tag">TACACS</span>
+          </div>
+        </div>
+
+        <div class="skill-group reveal">
+          <div class="skill-group-title">Operations</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Risk Assessment</span>
+            <span class="skill-tag">Incident Handling</span>
+            <span class="skill-tag">Root Cause Analysis</span>
+            <span class="skill-tag">Ticketing Systems</span>
+            <span class="skill-tag">Documentation</span>
+            <span class="skill-tag">SOP Creation</span>
+            <span class="skill-tag">Cross-functional Collab</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CERTIFICATIONS -->
+  <section id="certifications">
+    <div class="container">
+      <p class="section-label reveal">// credentials</p>
+      <h2 class="section-title reveal">Certifications</h2>
+      <div class="certs-grid">
+        <div class="cert-card reveal">
+          <div class="cert-icon" style="background: rgba(0,212,255,0.1); color: var(--accent);">🛡️</div>
+          <div>
+            <div class="cert-name">Zero Trust Certified Associate</div>
+            <div class="cert-abbr">ZTCA</div>
+          </div>
+        </div>
+        <div class="cert-card reveal">
+          <div class="cert-icon" style="background: rgba(123,97,255,0.1); color: var(--accent2);">🌐</div>
+          <div>
+            <div class="cert-name">Cisco Certified Network Associate</div>
+            <div class="cert-abbr">CCNA</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="container">
+      <p class="section-label reveal">// academic background</p>
+      <h2 class="section-title reveal">Education</h2>
+      <div class="edu-card reveal">
+        <div>
+          <div class="edu-degree">Bachelor of Technology</div>
+          <div class="edu-field">Computer Science</div>
+          <div class="edu-school">IEC College of Engineering and Technology, Noida</div>
+        </div>
+        <div class="edu-year">2018 – 2022</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <p class="section-label reveal">// get in touch</p>
+      <h2 class="section-title reveal">Contact</h2>
+      <div class="contact-grid">
+        <a href="tel:+918957208416" class="contact-card reveal">
+          <div class="contact-icon">📱</div>
+          <div>
+            <div class="contact-label">Phone</div>
+            <div class="contact-value">+91 89572 08416</div>
+          </div>
+        </a>
+        <a href="mailto:aditya10328@gmail.com" class="contact-card reveal">
+          <div class="contact-icon">✉️</div>
+          <div>
+            <div class="contact-label">Email</div>
+            <div class="contact-value">aditya10328@gmail.com</div>
+          </div>
+        </a>
+        <div class="contact-card reveal" style="cursor: default;">
+          <div class="contact-icon">📍</div>
+          <div>
+            <div class="contact-label">Location</div>
+            <div class="contact-value">Varanasi, India</div>
+          </div>
+        </div>
+        <div class="contact-card reveal" style="cursor: default;">
+          <div class="contact-icon">💼</div>
+          <div>
+            <div class="contact-label">Open To</div>
+            <div class="contact-value">Trust & Safety / Security Roles</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HOW TO UPDATE -->
+      <div class="update-box reveal">
+        <div class="update-title">📝 How to update this portfolio when you learn new skills</div>
+        <div class="update-steps">
+          <div class="update-step"><span class="step-num">1.</span>Open this file in any text editor (Notepad, VS Code, etc.).</div>
+          <div class="update-step"><span class="step-num">2.</span>To add a new skill: find the matching <code>&lt;div class="skill-group"&gt;</code> and add <code>&lt;span class="skill-tag"&gt;Your New Skill&lt;/span&gt;</code> inside the <code>.skill-tags</code> div.</div>
+          <div class="update-step"><span class="step-num">3.</span>To add a new job: copy one of the <code>&lt;div class="exp-card"&gt;</code> blocks and update the company, role, period, and bullet points.</div>
+          <div class="update-step"><span class="step-num">4.</span>To add a certification: copy a <code>&lt;div class="cert-card"&gt;</code> block and update the name and abbreviation.</div>
+          <div class="update-step"><span class="step-num">5.</span>Save the file and open it in any browser — your changes appear instantly. No server needed!</div>
+          <div class="update-step"><span class="step-num">6.</span>To host it free online: drag and drop this file onto <strong>netlify.com/drop</strong> and get a live URL in seconds.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Aditya Patel · Built with passion, protected by intent.</p>
+  </footer>
+
+  <!-- SCROLL REVEAL SCRIPT -->
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          e.target.style.transitionDelay = (i * 0.05) + 's';
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
